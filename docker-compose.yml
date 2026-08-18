@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    image: iss-tracker-backend:local
+    restart: unless-stopped
+    environment:
+      TLE_URL: ${TLE_URL:-https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=tle}
+      TLE_CACHE_TTL_SECONDS: ${TLE_CACHE_TTL_SECONDS:-7200}
+      TLE_HARD_EXPIRY_SECONDS: ${TLE_HARD_EXPIRY_SECONDS:-259200}
+      TLE_STALE_WARNING_SECONDS: ${TLE_STALE_WARNING_SECONDS:-86400}
+      # Same-origin through the nginx proxy, so CORS only matters for direct calls.
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    ports:
+      # Published only so /docs is reachable while developing; the app itself uses the proxy.
+      - '${BACKEND_PORT:-8000}:8000'
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-}
+        VITE_TILE_URL: ${VITE_TILE_URL:-}
+        VITE_TILE_ATTRIBUTION: ${VITE_TILE_ATTRIBUTION:-}
+    image: iss-tracker-frontend:local
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - '${FRONTEND_PORT:-8080}:8080'

@@ -1,0 +1,49 @@
+:root {
+  /* Palette — mission-control ground-track display, not a consumer map. */
+  --color-base: #0b0e14;
+  --color-panel: #141a24;
+  --color-live: #7df9d3;
+  --color-future: #f2a65a;
+  --color-past: #5a6478;
+  --color-text: #e8ecf2;
+  --color-text-muted: #8c97a8;
+  --color-danger: #ff6b6b;
+  --color-night: #050810;
+
+  --color-panel-surface: rgba(20, 26, 36, 0.82);
+  --color-panel-border: rgba(232, 236, 242, 0.14);
+  --color-panel-shadow: rgba(0, 0, 0, 0.45);
+
+  /* Map overlays sit on the bright basemap, so they need darker values than the panel
+     tokens above, which are tuned for the dark panel surface. --color-map-land matches
+     the basemap's land fill and backs the legend swatches, so the key shows each line
+     exactly as it appears on the map. */
+  --color-map-land: #f5f1ec;
+  --color-map-past: #4a5568;
+  --color-map-future: #cf6412;
+  --color-map-live: #0b7a5e;
+
+  /* Inter is drawn for legibility at small sizes. Numbers use the same face with
+     tabular figures rather than a monospace, which keeps digit columns from shifting as
+     they tick without the mechanical look of a typewriter face. */
+  --font-sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --text-label: 0.6875rem;
+  --text-value: 0.9375rem;
+  --text-title: 0.75rem;
+  --text-detail: 0.6875rem;
+  --tracking-label: 0.01em;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+
+  --radius-panel: 9px;
+  --panel-blur: 14px;
+  --panel-width: 15rem;
+  --panel-padding: 0.75rem;
+
+  --breakpoint-stack: 768px;
+}

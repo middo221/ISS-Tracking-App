@@ -1,0 +1,320 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-base);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-live);
+  outline-offset: 2px;
+}
+
+/* ---------- Layout ---------- */
+
+.app {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  height: 100dvh;
+  position: relative;
+  background: var(--color-base);
+}
+
+.app__map {
+  position: relative;
+  min-height: 0;
+}
+
+.world-map {
+  height: 100%;
+  width: 100%;
+  background: var(--color-base);
+}
+
+/* Place names come in on their own transparent layer, so they can be tuned without
+   touching the basemap. This layer carries no halo, so it just gets darkened for contrast
+   against the pale land underneath. */
+.world-map .world-map__labels {
+  filter: brightness(0.75) saturate(0.85);
+}
+
+/* ---------- Telemetry ---------- */
+
+.telemetry {
+  position: absolute;
+  left: var(--space-4);
+  bottom: var(--space-4);
+  z-index: 900;
+  width: min(var(--panel-width), calc(100% - 2 * var(--space-4)));
+  padding: var(--panel-padding);
+  background: var(--color-panel-surface);
+  backdrop-filter: blur(var(--panel-blur));
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--radius-panel);
+  box-shadow: 0 8px 28px var(--color-panel-shadow);
+}
+
+.telemetry__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.telemetry__title {
+  margin: 0;
+  font-size: var(--text-title);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  color: var(--color-text);
+}
+
+.telemetry__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-label);
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--color-live);
+}
+
+.telemetry__status--stale,
+.telemetry__status--acquiring {
+  color: var(--color-future);
+}
+
+.telemetry__status--reconnecting {
+  color: var(--color-danger);
+}
+
+.telemetry__beacon {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  animation: telemetry-pulse 2s ease-in-out infinite;
+}
+
+@keyframes telemetry-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.telemetry__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2) var(--space-3);
+  margin: 0;
+}
+
+.telemetry__label {
+  margin: 0;
+  font-size: var(--text-label);
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.telemetry__value {
+  margin: 1px 0 0;
+  font-size: var(--text-value);
+  font-weight: 500;
+  /* Fixed-width digits, so the readouts do not jitter as they tick. */
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+.telemetry__footer {
+  margin-top: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-panel-border);
+}
+
+.telemetry__key {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.telemetry__key-entry {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-detail);
+  color: var(--color-text);
+}
+
+.telemetry__key-swatch {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--color-map-land);
+}
+
+.telemetry__key-line {
+  width: 20px;
+  height: 0;
+}
+
+.telemetry__key-line--past {
+  border-top: 2.5px solid var(--color-map-past);
+}
+
+.telemetry__key-line--future {
+  border-top: 3px dotted var(--color-map-future);
+}
+
+.telemetry__detail {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-detail);
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+/* The status line stays in the DOM as a live region but takes no space while healthy. */
+.telemetry__detail:empty {
+  display: none;
+}
+
+.telemetry__detail--warn {
+  margin-top: var(--space-2);
+  color: var(--color-future);
+}
+
+/* ---------- Marker ---------- */
+
+.iss-marker {
+  background: none;
+  border: none;
+}
+
+.iss-marker__rotor {
+  width: 100%;
+  height: 100%;
+  transform: rotate(var(--iss-heading, 0deg));
+  transform-origin: 50% 50%;
+  /* A drop shadow rather than a glow: the marker now sits on a bright basemap, where a
+     halo would wash out but a shadow lifts it off the surface. */
+  filter: drop-shadow(0 1px 2px rgba(11, 18, 32, 0.5));
+}
+
+.iss-marker svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.iss-marker__panel {
+  fill: var(--color-map-live);
+  fill-opacity: 0.45;
+  stroke: var(--color-map-live);
+  stroke-width: 1.2;
+}
+
+.iss-marker__boom {
+  stroke: var(--color-map-live);
+  stroke-width: 1.8;
+}
+
+.iss-marker__body {
+  fill: var(--color-map-live);
+}
+
+.iss-marker__nose {
+  fill: var(--color-map-live);
+}
+
+/* ---------- Leaflet chrome ---------- */
+
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--color-base);
+}
+
+.leaflet-control-zoom a {
+  background: var(--color-panel-surface);
+  color: var(--color-text);
+  border-color: var(--color-panel-border);
+  backdrop-filter: blur(var(--panel-blur));
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--color-panel);
+  color: var(--color-live);
+}
+
+.leaflet-control-attribution {
+  background: rgba(11, 14, 20, 0.78) !important;
+  color: var(--color-text-muted);
+  font-size: 0.6875rem;
+}
+
+.leaflet-control-attribution a {
+  color: var(--color-live);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 768px) {
+  .app {
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .telemetry {
+    position: static;
+    width: auto;
+    padding: var(--space-3);
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    backdrop-filter: none;
+    background: var(--color-panel);
+    box-shadow: none;
+  }
+
+  .telemetry__header {
+    flex-wrap: wrap;
+  }
+
+  /* Side by side on mobile, where vertical space is the scarce dimension. */
+  .telemetry__key {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
