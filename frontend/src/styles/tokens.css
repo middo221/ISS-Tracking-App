@@ -12,7 +12,6 @@
 
   --color-panel-surface: rgba(20, 26, 36, 0.82);
   --color-panel-border: rgba(232, 236, 242, 0.14);
-  --color-panel-shadow: rgba(0, 0, 0, 0.45);
 
   /* Map overlays sit on the bright basemap, so they need darker values than the panel
      tokens above, which are tuned for the dark panel surface. --color-map-land matches
@@ -40,10 +39,7 @@
   --space-4: 1rem;
   --space-5: 1.5rem;
 
-  --radius-panel: 9px;
   --panel-blur: 14px;
-  --panel-width: 15rem;
-  --panel-padding: 0.75rem;
 
   --breakpoint-stack: 768px;
 }

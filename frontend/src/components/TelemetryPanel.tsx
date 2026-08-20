@@ -85,14 +85,14 @@ export function TelemetryPanel(props: TelemetryPanelProps): React.JSX.Element {
   const status = describeStatus(props);
 
   return (
-    <section className="telemetry" aria-label="ISS telemetry">
-      <header className="telemetry__header">
+    <header className="telemetry" aria-label="ISS telemetry">
+      <div className="telemetry__identity">
         <h1 className="telemetry__title">ISS</h1>
         <p className={`telemetry__status telemetry__status--${status.condition}`} role="status">
           <span className="telemetry__beacon" aria-hidden="true" />
           {status.label}
         </p>
-      </header>
+      </div>
 
       <dl className="telemetry__grid">
         <Readout
@@ -113,21 +113,19 @@ export function TelemetryPanel(props: TelemetryPanelProps): React.JSX.Element {
         />
       </dl>
 
-      <div className="telemetry__footer">
-        <ul className="telemetry__key" aria-label="Ground track key">
-          <KeyEntry variant="future" label="Where it's going" />
-          <KeyEntry variant="past" label="Where it's been" />
-        </ul>
+      <ul className="telemetry__key" aria-label="Ground track key">
+        <KeyEntry variant="future" label="Where it's going" />
+        <KeyEntry variant="past" label="Where it's been" />
+      </ul>
 
-        {/* Always in the DOM so the live region can announce; CSS collapses it when
-            empty, which is the healthy case. */}
-        <p className="telemetry__detail" aria-live="polite">
-          {status.detail}
-        </p>
-        {trackError !== null && (
-          <p className="telemetry__detail telemetry__detail--warn">{trackError}.</p>
-        )}
-      </div>
-    </section>
+      {/* Always in the DOM so the live region can announce; CSS collapses it when empty,
+          which is the healthy case. Takes a full row of its own when it does appear. */}
+      <p className="telemetry__detail" aria-live="polite">
+        {status.detail}
+      </p>
+      {trackError !== null && (
+        <p className="telemetry__detail telemetry__detail--warn">{trackError}.</p>
+      )}
+    </header>
   );
 }

@@ -28,6 +28,15 @@ export default function App(): React.JSX.Element {
 
   return (
     <div className="app">
+      <TelemetryPanel
+        position={position.data}
+        error={position.error}
+        trackError={track.error}
+        isStale={position.isStale}
+        secondsSinceContact={position.secondsSinceContact}
+        pollIntervalMs={position.pollIntervalMs}
+      />
+
       <div className="app__map">
         <WorldMap>
           {track.data !== null && <GroundTrack track={track.data} nowMs={nowMs} />}
@@ -43,15 +52,6 @@ export default function App(): React.JSX.Element {
           )}
         </WorldMap>
       </div>
-
-      <TelemetryPanel
-        position={position.data}
-        error={position.error}
-        trackError={track.error}
-        isStale={position.isStale}
-        secondsSinceContact={position.secondsSinceContact}
-        pollIntervalMs={position.pollIntervalMs}
-      />
     </div>
   );
 }
